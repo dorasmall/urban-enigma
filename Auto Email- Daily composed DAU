@@ -1,0 +1,22 @@
+
+function pullEmailData() {
+  var ss = SpreadsheetApp.getActiveSheet();
+  // 第一次执行的时候添加header
+  ss.appendRow(['date','name','uv rate','view uv','avg view num','avg play num','avg finish num','avg playtime','avg share num','avg like num','avg download num','avg comment num','avg video playtime'])
+  var label = GmailApp.getUserLabelByName("composed dau");
+  var threads = label.getThreads();
+  for (var i = 0; i < threads.length; i++) {
+    var messages = threads[i].getMessages();
+    for (var j = 0; j < messages.length; j++) {
+      var rawBody = messages[j].getPlainBody();
+       var rawArr = rawBody.split('$')
+      // console.log(rawArr)
+      for (var k = 0; k < rawArr.length; k++) {
+        console.log(rawArr[k])
+        ss.appendRow(rawArr[k].trim().split(','))
+      }
+    }
+    // 清空label中的邮件
+    // threads[i].removeLabel(label);
+  }
+}
